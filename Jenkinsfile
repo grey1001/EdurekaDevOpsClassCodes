@@ -61,15 +61,6 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Image') {
-            steps {
-                script {
-                    docker.withRegistry('', registryCredential) {
-                        dockerImage.push("v${BUILD_NUMBER}")
-                    }
-                }
-            }
-        }
         stage('Trivy Scan') {
             steps {
                 script {
@@ -87,6 +78,16 @@ pipeline {
                 }
             }
         }
+        stage('Deploy Image') {
+            steps {
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        dockerImage.push("v${BUILD_NUMBER}")
+                    }
+                }
+            }
+        }
+        
     }
 
     post {
