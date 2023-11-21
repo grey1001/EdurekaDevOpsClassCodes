@@ -11,7 +11,7 @@ pipeline {
         slack = 'slack'
     }
     stages {
-        stage('clean workspace') {
+        stage('Clean workspace') {
             steps {
                 cleanWs()
             }
@@ -22,8 +22,13 @@ pipeline {
             }
         }
         stage('SonarQube Analysis') {
-            withSonarQubeEnv() {
-                sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=addressbook -Dsonar.projectName='addressbook'"
+            steps {
+                script {
+                    def mvn = tool 'Default Maven'
+                    withSonarQubeEnv() {
+                        sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=addressbook -Dsonar.projectName='addressbook'"
+                    }
+                }
             }
         }
         stage("Quality Gate") {
@@ -87,7 +92,6 @@ pipeline {
                 }
             }
         }
-        
     }
 
     post {
