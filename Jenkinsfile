@@ -2,6 +2,7 @@ pipeline {
     agent any
     tools {
         jdk 'jdk17'
+        mvn 'Default Maven'
     }
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
@@ -21,7 +22,6 @@ pipeline {
             }
         }
         stage('SonarQube Analysis') {
-            def mvn = tool 'Default Maven'
             withSonarQubeEnv() {
                 sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=addressbook -Dsonar.projectName='addressbook'"
             }
